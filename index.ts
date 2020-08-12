@@ -3,7 +3,6 @@ import Stats from 'stats.js';
 // import './app.component';
 import './style.css';
 
-
 const _getCatImg = () => {
   const randomNum = () => {
     return Math.floor(Math.random() * 100000);
@@ -13,9 +12,7 @@ const _getCatImg = () => {
 };
 
 let topSentinelPreviousY = 0;
-let topSentinelPreviousRatio = 0;
 let bottomSentinelPreviousY = 0;
-let bottomSentinelPreviousRatio = 0;
 
 let listSize = 20;
 let DBSize = 200;
@@ -110,7 +107,6 @@ const topSentCallback = entry => {
   if (
     currentY > topSentinelPreviousY &&
     isIntersecting &&
-    currentRatio >= topSentinelPreviousRatio &&
     currentIndex !== 0
   ) {
     const firstIndex = getSlidingWindow(false);
@@ -120,21 +116,24 @@ const topSentCallback = entry => {
   }
 
   topSentinelPreviousY = currentY;
-  topSentinelPreviousRatio = currentRatio;
 }
 
 const botSentCallback = entry => {
 	if (currentIndex === DBSize - listSize) {
   	return;
   }
+
   const currentY = entry.boundingClientRect.top;
-  const currentRatio = entry.intersectionRatio;
   const isIntersecting = entry.isIntersecting;
+  console.log(`
+    !!!!!!!!!!!!!! BOTTOM CALLBACK !!!!!!!!!
+    isIntersecting: ${isIntersecting},
+    currentY: ${currentY},
+  `);
 
   // conditional check for Scrolling down
   if (
     currentY < bottomSentinelPreviousY &&
-    currentRatio > bottomSentinelPreviousRatio &&
     isIntersecting
   ) {
     const firstIndex = getSlidingWindow(true);
@@ -144,7 +143,6 @@ const botSentCallback = entry => {
   }
 
   bottomSentinelPreviousY = currentY;
-  bottomSentinelPreviousRatio = currentRatio;
 }
 
 const initIntersectionObserver = () => {
