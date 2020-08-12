@@ -1,0 +1,21 @@
+body, h1, h2 {
+  font-family: Lato;
+}
+
+.cat-list {
+  overflow: scroll;
+  list-style-type: none;
+  padding: 0;
+}
+
+.cat-tile {
+  background-color: grey;
+  margin: 10px 0;
+  height: 150px;
+  width: 100%;
+}
+
+#stats {
+  position: fixed;
+  top: 0; left: 0;
+}
