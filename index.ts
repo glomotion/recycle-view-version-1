@@ -129,6 +129,7 @@ const botSentCallback = entry => {
     !!!!!!!!!!!!!! BOTTOM CALLBACK !!!!!!!!!
     isIntersecting: ${isIntersecting},
     currentY: ${currentY},
+    rect: ${JSON.stringify(entry.boundingClientRect)},
   `);
 
   // conditional check for Scrolling down
