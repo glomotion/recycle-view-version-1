@@ -3,11 +3,11 @@ import Stats from 'stats.js';
 // import './app.component';
 import './style.css';
 
-const _getCatImg = () => {
+const getCatImg = () => {
   const randomNum = () => {
     return Math.floor(Math.random() * 100000);
   };
-  const url = "https://source.unsplash.com/collection/139386/100x100/?sig=";
+  const url = "https://source.unsplash.com/collection/139386/200x200/?sig=";
   return url + randomNum();
 };
 
@@ -23,7 +23,7 @@ const initDB = num => {
   	db.push({
     	catCounter: i,
       title: `cat image number ${i}`,
-      imgSrc: _getCatImg()
+      imgSrc: getCatImg()
     })
   }
   return db;
@@ -49,6 +49,13 @@ const initList = num => {
     tile.appendChild(img);
   	container.appendChild(tile);
   }
+}
+
+function getOuterHeight(el) {
+  const computedStyles = window.getComputedStyle(el);
+  const marginTop = parseInt(computedStyles.getPropertyValue('margin-top'));
+  const marginBottom = parseInt(computedStyles.getPropertyValue('margin-bottom'));
+  return el.offsetHeight + marginTop + marginBottom;
 }
 
 const getSlidingWindow = isScrollDown => {
@@ -82,13 +89,15 @@ const adjustPaddings = isScrollDown => {
 	const container = document.querySelector(".cat-list") as HTMLElement;
   const currentPaddingTop = getNumFromStyle(container.style.paddingTop);
   const currentPaddingBottom = getNumFromStyle(container.style.paddingBottom);
-  const remPaddingsVal = 170 * (listSize / 2);
+  const firstItem = container.querySelector('.cat-tile:nth-child(1)');
+  const removePaddingValue = getOuterHeight(firstItem) * (listSize / 2);
+
 	if (isScrollDown) {
-  	container.style.paddingTop = currentPaddingTop + remPaddingsVal + "px";
-    container.style.paddingBottom = currentPaddingBottom === 0 ? "0px" : currentPaddingBottom - remPaddingsVal + "px";
+  	container.style.paddingTop = currentPaddingTop + removePaddingValue + "px";
+    container.style.paddingBottom = currentPaddingBottom === 0 ? "0px" : currentPaddingBottom - removePaddingValue + "px";
   } else {
-  	container.style.paddingBottom = currentPaddingBottom + remPaddingsVal + "px";
-    container.style.paddingTop = currentPaddingTop === 0 ? "0px" : currentPaddingTop - remPaddingsVal + "px";
+  	container.style.paddingBottom = currentPaddingBottom + removePaddingValue + "px";
+    container.style.paddingTop = currentPaddingTop === 0 ? "0px" : currentPaddingTop - removePaddingValue + "px";
   }
 }
 
@@ -125,12 +134,12 @@ const botSentCallback = entry => {
 
   const currentY = entry.boundingClientRect.top;
   const isIntersecting = entry.isIntersecting;
-  console.log(`
-    !!!!!!!!!!!!!! BOTTOM CALLBACK !!!!!!!!!
-    isIntersecting: ${isIntersecting},
-    currentY: ${currentY},
-    rect: ${JSON.stringify(entry.boundingClientRect)},
-  `);
+  // console.log(`
+  //   !!!!!!!!!!!!!! BOTTOM CALLBACK !!!!!!!!!
+  //   isIntersecting: ${isIntersecting},
+  //   currentY: ${currentY},
+  //   rect: ${JSON.stringify(entry.boundingClientRect)},
+  // `);
 
   // conditional check for Scrolling down
   if (
@@ -168,7 +177,7 @@ const initIntersectionObserver = () => {
 
 const start = () => {
   DBSize = 200;
-  listSize = 20;
+  listSize = 10;
   DB = initDB(DBSize);
 	initList(listSize);
 	initIntersectionObserver();
