@@ -115,8 +115,7 @@ const topSentCallback = entry => {
   // conditional check for Scrolling up
   if (
     currentY > topSentinelPreviousY &&
-    isIntersecting &&
-    currentIndex !== 0
+    isIntersecting
   ) {
     const firstIndex = getSlidingWindow(false);
     adjustPaddings(false);
